@@ -22,6 +22,7 @@ import (
 	"nexusSync/util"
 	"os"
 	"runtime"
+	"strings"
 )
 
 var cfg = new(core.Config)
@@ -63,12 +64,14 @@ func init() {
 }
 
 func run() error {
-	//设置线程数，建议少于CPU核数,如果超过核数将默认为核数大小
-	if cfg.Process > 0 && cfg.Process < runtime.NumCPU() {
-		runtime.GOMAXPROCS(cfg.Process)
+	err := checkParam(cfg)
+	if err != nil {
+		fmt.Println(err)
+		return nil
 	}
 	var syncService = new(core.NexusSyncService)
 	option := cfg.Option
+	option = strings.TrimSpace(option)
 	switch option {
 	case util.Post:
 		fmt.Println("start upload")
@@ -77,7 +80,33 @@ func run() error {
 		fmt.Println("start download")
 		syncService.StartDownload(cfg)
 	default:
-		panic("option error, format:GET / POST")
+		fmt.Println("option error, format:GET / POST")
+	}
+	return nil
+}
+
+func checkParam(config *core.Config) error {
+	if len(config.RemoteUrl) < 0 {
+		return fmt.Errorf("param remoteUrl is not valid")
+	}
+	//设置线程数，建议少于CPU核数,如果超过核数将默认为核数大小
+	if cfg.Process > 0 && cfg.Process < runtime.NumCPU() {
+		runtime.GOMAXPROCS(cfg.Process)
+	}
+	//验证user信息
+	auth := strings.Split(config.Auth, ":")
+	if len(auth) < 1 {
+		return fmt.Errorf("auth info error, plearse split with `:`")
+
+	}
+	config.Usr = auth[0]
+	config.Pwd = auth[1]
+
+	//验证localDir
+	localDir := config.LocalDir
+	if err := util.PathExists(localDir); err != nil {
+		fmt.Println(err)
+		return fmt.Errorf("param localDir is not valid")
 	}
 	return nil
 }

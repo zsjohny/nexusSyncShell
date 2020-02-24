@@ -6,6 +6,11 @@ import (
 	"os"
 )
 
+type PostModel struct {
+	FilePath  string
+	LevelInfo string
+}
+
 func PathExists(path string) error {
 	_, err := os.Stat(path)
 	if err == nil {
@@ -31,37 +36,25 @@ func IsFile(path string) bool {
 	return !IsDir(path)
 }
 
-//获取指定目录下的所有文件和目录
-func GetAllFiles(dirPth string) (files []string, err error) {
-	var dirs []string
-	//去除后缀中的/防止下面读取出错
-	if dirPth[len(dirPth)-1] == '/' {
-		dirPth = dirPth[:len(dirPth)-1]
-	}
-	dir, err := ioutil.ReadDir(dirPth)
+func GetAllFiles(pathname string, postModels []PostModel, basePath string) ([]PostModel, error) {
+	sep := string(os.PathSeparator)
+	rd, err := ioutil.ReadDir(pathname)
 	if err != nil {
-		return nil, fmt.Errorf("read dirPath error")
+		fmt.Println("read dir fail:", err)
+		return postModels, err
 	}
-
-	PthSep := string(os.PathSeparator)
-	//suffix = strings.ToUpper(suffix) //忽略后缀匹配的大小写
-
-	for _, fi := range dir {
-		if fi.IsDir() { // 目录, 递归遍历
-			dirs = append(dirs, dirPth+PthSep+fi.Name())
-			GetAllFiles(dirPth + PthSep + fi.Name())
+	for _, fi := range rd {
+		if fi.IsDir() {
+			fullDir := pathname + sep + fi.Name()
+			postModels, err = GetAllFiles(fullDir, postModels, basePath+fi.Name()+"/")
+			if err != nil {
+				fmt.Println("read dir fail:", err)
+				return postModels, err
+			}
 		} else {
-			files = append(files, dirPth+PthSep+fi.Name())
+			fullName := pathname + sep + fi.Name()
+			postModels = append(postModels, PostModel{fullName, basePath})
 		}
 	}
-
-	// 读取子目录下文件
-	for _, table := range dirs {
-		temp, _ := GetAllFiles(table)
-		for _, temp1 := range temp {
-			files = append(files, temp1)
-		}
-	}
-
-	return files, nil
+	return postModels, nil
 }

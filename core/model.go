@@ -9,6 +9,8 @@ type Config struct {
 	Process   int
 	RemoteDir string
 	LocalDir  string
+	Usr       string
+	Pwd       string
 }
 type Body struct {
 	Items []Component

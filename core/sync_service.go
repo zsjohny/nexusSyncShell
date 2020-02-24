@@ -22,19 +22,14 @@ type NexusSyncService struct {
 func (nexusSyncService *NexusSyncService) StartUpload(config *Config) {
 	fmt.Println("traverse the dir")
 	localPath := config.LocalDir
-	files, err := util.GetAllFiles(localPath)
+
+	var postModels []util.PostModel
+	files, err := util.GetAllFiles(localPath, postModels, "/")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	usr, pwd, err := checkAuthValid(config)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	remoteUrl := config.RemoteUrl
 	remoteDir := Nexus_operator
 	if len(config.RemoteDir) > 0 {
 		remoteDir = config.RemoteDir
@@ -45,8 +40,8 @@ func (nexusSyncService *NexusSyncService) StartUpload(config *Config) {
 	wg.Add(len(files))
 
 	for _, file := range files {
-		go func(wg *sync.WaitGroup, file string) {
-			err := util.NexusPost(remoteUrl, usr, pwd, file, remoteDir)
+		go func(wg *sync.WaitGroup, file util.PostModel) {
+			err := util.NexusPost(config.RemoteUrl, config.Usr, config.Pwd, file.FilePath, remoteDir+file.LevelInfo)
 			if err != nil {
 				fmt.Println(err)
 			} else {
@@ -60,33 +55,9 @@ func (nexusSyncService *NexusSyncService) StartUpload(config *Config) {
 
 }
 
-func checkAuthValid(config *Config) (string, string, error) {
-	//验证信息
-	auth := strings.Split(config.Auth, ":")
-	if len(auth) < 1 {
-		return "", "", fmt.Errorf("auth info error, plearse split with `:`")
-
-	}
-	usr := auth[0]
-	pwd := auth[1]
-	return usr, pwd, nil
-}
-
 func (*NexusSyncService) StartDownload(config *Config) {
-	// valid data
-	localDir := config.LocalDir
-	if err := util.PathExists(localDir); err != nil {
-		fmt.Println(err)
-		return
-	}
-	remoteUrl := config.RemoteUrl
-	usr, pwd, err := checkAuthValid(config)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
 	//list component
-	resp, err := util.BasicAuthGet(remoteUrl, usr, pwd)
+	resp, err := util.BasicAuthGet(config.RemoteUrl, config.Usr, config.Pwd)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -104,7 +75,7 @@ func (*NexusSyncService) StartDownload(config *Config) {
 	//查找匹配路径的文件
 	var assets []Asset
 	for _, cpn := range *components {
-		if cpn.Group == config.RemoteDir {
+		if strings.HasPrefix(cpn.Group, config.RemoteDir) {
 			assets = append(assets, *cpn.Assets...)
 		}
 	}
@@ -116,7 +87,7 @@ func (*NexusSyncService) StartDownload(config *Config) {
 		//fmt.Println("download asset info:", assets[idx])
 		go func(wg *sync.WaitGroup, asset *Asset) {
 			fileName := path.Base(asset.DownloadUrl)
-			fileName = localDir + string(os.PathSeparator) + fileName
+			fileName = config.LocalDir + string(os.PathSeparator) + fileName
 			fmt.Printf("ready to get fileName:%s\n", fileName)
 			if resp, err := http.Get(asset.DownloadUrl); err == nil {
 				var byteBuf []byte

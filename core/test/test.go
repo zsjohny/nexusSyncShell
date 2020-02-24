@@ -3,21 +3,24 @@ package main
 import "nexusSync/core"
 
 func main() {
-	/*config := core.Config{"POST",
-	"xiao:xiao",
-	"https://nexus.huya.com/service/rest/v1/components?repository=xiao",
-	2,
-	"/lsj_test",
-	path}
 
-	servcie := new(core.NexusSyncService)
-	servcie.StartUpload(&config)*/
+	//fmt.Println(strings.HasPrefix("11123a", "1113"))
+	/*	config := core.Config{"POST",
+		"xiao:xiao",
+		"https://nexus.huya.com/service/rest/v1/components?repository=xiao",
+		2,
+		"/lsj_test",
+			"c:/test", "xiao", "xiao"}
+
+		servcie := new(core.NexusSyncService)
+		servcie.StartUpload(&config)*/
 	config := core.Config{"GET",
 		"xiao:xiao",
 		"https://nexus.huya.com/service/rest/v1/components?repository=xiao",
 		2,
 		"/lsj_test",
-		"c:/test"}
+		"c:\\testdown",
+		"xiao", "xiao"}
 
 	servcie := new(core.NexusSyncService)
 	servcie.StartDownload(&config)
