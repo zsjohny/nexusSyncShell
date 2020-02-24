@@ -3,7 +3,6 @@ package core
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -21,18 +20,17 @@ type NexusSyncService struct {
 }
 
 func (nexusSyncService *NexusSyncService) StartUpload(config *Config) {
-	fmt.Println("start upload")
 	fmt.Println("traverse the dir")
 	localPath := config.LocalDir
 	files, err := util.GetAllFiles(localPath)
 	if err != nil {
-		fmt.Errorf("read localDir fail")
+		fmt.Println(err)
 		return
 	}
 
 	usr, pwd, err := checkAuthValid(config)
 	if err != nil {
-		fmt.Errorf(err.Error())
+		fmt.Println(err)
 		return
 	}
 
@@ -50,7 +48,7 @@ func (nexusSyncService *NexusSyncService) StartUpload(config *Config) {
 		go func(wg *sync.WaitGroup, file string) {
 			err := util.NexusPost(remoteUrl, usr, pwd, file, remoteDir)
 			if err != nil {
-				fmt.Printf("file %s upload fail\n", file)
+				fmt.Println(err)
 			} else {
 				fmt.Printf("file %s upload success\n", file)
 			}
@@ -66,7 +64,7 @@ func checkAuthValid(config *Config) (string, string, error) {
 	//验证信息
 	auth := strings.Split(config.Auth, ":")
 	if len(auth) < 1 {
-		return "", "", errors.New("auth info error, plearse split with `:`")
+		return "", "", fmt.Errorf("auth info error, plearse split with `:`")
 
 	}
 	usr := auth[0]
@@ -75,34 +73,35 @@ func checkAuthValid(config *Config) (string, string, error) {
 }
 
 func (*NexusSyncService) StartDownload(config *Config) {
-	fmt.Println("start download")
 	// valid data
 	localDir := config.LocalDir
 	if err := util.PathExists(localDir); err != nil {
-		fmt.Printf("localDir error, err : %s\n", err)
+		fmt.Println(err)
 		return
 	}
 	remoteUrl := config.RemoteUrl
 	usr, pwd, err := checkAuthValid(config)
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println(err)
 		return
 	}
 	//list component
 	resp, err := util.BasicAuthGet(remoteUrl, usr, pwd)
 	if err != nil {
+		fmt.Println(err)
 		return
 	}
 	jsonStr, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Println("read response error")
+		fmt.Println("read response error, err:%s", err)
 		return
 	}
-	components := json2Struct(string(jsonStr))
-	if components == nil {
+	components, err := json2Struct(string(jsonStr))
+	if err != nil {
+		fmt.Println(err)
 		return
 	}
-	//find correct path
+	//查找匹配路径的文件
 	var assets []Asset
 	for _, cpn := range *components {
 		if cpn.Group == config.RemoteDir {
@@ -118,12 +117,13 @@ func (*NexusSyncService) StartDownload(config *Config) {
 		go func(wg *sync.WaitGroup, asset *Asset) {
 			fileName := path.Base(asset.DownloadUrl)
 			fileName = localDir + string(os.PathSeparator) + fileName
-			fmt.Printf("ready to get fileName:%s", fileName)
+			fmt.Printf("ready to get fileName:%s\n", fileName)
 			if resp, err := http.Get(asset.DownloadUrl); err == nil {
 				buffer := bytes.NewBuffer(make([]byte, 4096))
 				_, err := io.Copy(buffer, resp.Body)
 				defer resp.Body.Close()
 				if err != nil {
+					fmt.Printf("io copy fail when get file %s, err:%s\n", fileName, err)
 					return
 				}
 				ioutil.WriteFile(fileName, buffer.Bytes(), 0777)
@@ -139,12 +139,11 @@ func (*NexusSyncService) StartDownload(config *Config) {
 
 }
 
-func json2Struct(jsonStr string) *[]Component {
+func json2Struct(jsonStr string) (*[]Component, error) {
 	var bodyJSON Body
 	err := json.Unmarshal([]byte(jsonStr), &bodyJSON)
 	if err != nil {
-		fmt.Printf("json2Struct error,err:%s\n", err)
-		return nil
+		return nil, fmt.Errorf("json2Struct error,err:%s\n", err)
 	}
-	return &bodyJSON.Items
+	return &bodyJSON.Items, nil
 }

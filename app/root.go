@@ -63,20 +63,21 @@ func init() {
 }
 
 func run() error {
-	fmt.Println("config", cfg)
-	//设置线程数，建议少于CPU核数
-	if cfg.Process <= 0 && cfg.Process < runtime.NumCPU() {
+	//设置线程数，建议少于CPU核数,如果超过核数将默认为核数大小
+	if cfg.Process > 0 && cfg.Process < runtime.NumCPU() {
 		runtime.GOMAXPROCS(cfg.Process)
 	}
 	var syncService = new(core.NexusSyncService)
 	option := cfg.Option
 	switch option {
 	case util.Post:
+		fmt.Println("start upload")
 		syncService.StartUpload(cfg)
 	case util.Get:
+		fmt.Println("start download")
 		syncService.StartDownload(cfg)
 	default:
-		fmt.Errorf("option error, format:GET / POST")
+		panic("option error, format:GET / POST")
 	}
 	return nil
 }

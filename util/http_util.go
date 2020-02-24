@@ -19,7 +19,7 @@ const (
 	File_name        = "raw.assetN.filename"
 )
 
-//文件路径只兼容linux
+//文件路径只兼容linux,不建议windows跑，有可能路径出错
 func NewMutipartPostRequest(postUrl, filePath string, tarPath string) (req *http.Request, err error) {
 	file, err := os.Open(filePath)
 	if err != nil {
@@ -39,14 +39,14 @@ func NewMutipartPostRequest(postUrl, filePath string, tarPath string) (req *http
 	//相当于现在还没选择文件, form项里选择文件的选项
 	fileWriter, err := bodyWriter.CreateFormFile(Asset_n, fileName)
 	if err != nil {
-		fmt.Println("error writing to buffer")
-		return nil, err
+
+		return nil, fmt.Errorf("error writing to buffer, file:%s", fileName)
 	}
 
 	//iocopy 这里相当于选择了文件,将文件放到form中
 	_, err = io.Copy(fileWriter, file)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("io copy error, file:%s", fileName)
 	}
 
 	bodyWriter.WriteField(Directory, tarPath)
@@ -63,18 +63,15 @@ func NewMutipartPostRequest(postUrl, filePath string, tarPath string) (req *http
 func NexusPost(postUrl, username, password, filePath, tarPath string) error {
 	req, err := NewMutipartPostRequest(postUrl, filePath, tarPath)
 	if err != nil {
-		fmt.Printf("file %s generate request fail\n", filePath)
-		return err
+		return fmt.Errorf("file %s generate request fail\n", filePath)
 	}
 	req.SetBasicAuth(username, password)
 	response, err := http.DefaultClient.Do(req)
 	if err != nil {
-		fmt.Printf("file %s request fail\n", filePath)
-		return err
+		return fmt.Errorf("file %s request fail\n", filePath)
 	}
 	if response.StatusCode != http.StatusNoContent {
-		fmt.Printf("response status code error,code = %d, file : %s\n", response.StatusCode, filePath)
-		return err
+		return fmt.Errorf("response status code error,code = %d, file : %s\n", response.StatusCode, filePath)
 	}
 	return nil
 }
@@ -82,14 +79,14 @@ func NexusPost(postUrl, username, password, filePath, tarPath string) error {
 func BasicAuthGet(url string, username, password string) (*http.Response, error) {
 	request, err := http.NewRequest(Get, url, nil)
 	if err != nil {
-		fmt.Println("get request generation fail")
-		return nil, err
+
+		return nil, fmt.Errorf("GET request generation fail,please check the param or contact the dev")
 	}
 	request.SetBasicAuth(username, password)
 	resp, err := http.DefaultClient.Do(request)
 	if err != nil {
-		fmt.Printf("get request fail，code= %d\n", resp.StatusCode)
-		return nil, err
+
+		return nil, fmt.Errorf("GET request fail when list the component，code= %d\n", resp.StatusCode)
 	}
 	return resp, nil
 }

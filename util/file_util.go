@@ -12,9 +12,9 @@ func PathExists(path string) error {
 		return nil
 	}
 	if os.IsNotExist(err) {
-		return err
+		return fmt.Errorf("file doesn't exists or error isn't be defined in os, path = %s", path)
 	}
-	return err
+	return fmt.Errorf("file doesn't exists ,path = %s", path)
 }
 
 // 判断所给路径是否为文件夹
@@ -40,7 +40,7 @@ func GetAllFiles(dirPth string) (files []string, err error) {
 	}
 	dir, err := ioutil.ReadDir(dirPth)
 	if err != nil {
-		return nil, fmt.Errorf("dirPath error")
+		return nil, fmt.Errorf("read dirPath error")
 	}
 
 	PthSep := string(os.PathSeparator)
