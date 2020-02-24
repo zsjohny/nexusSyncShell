@@ -34,13 +34,13 @@ func IsFile(path string) bool {
 //获取指定目录下的所有文件和目录
 func GetAllFiles(dirPth string) (files []string, err error) {
 	var dirs []string
+	//去除后缀中的/防止下面读取出错
 	if dirPth[len(dirPth)-1] == '/' {
 		dirPth = dirPth[:len(dirPth)-1]
 	}
 	dir, err := ioutil.ReadDir(dirPth)
 	if err != nil {
-		fmt.Println("dirPath error")
-		return nil, err
+		return nil, fmt.Errorf("dirPath error")
 	}
 
 	PthSep := string(os.PathSeparator)

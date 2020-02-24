@@ -64,7 +64,7 @@ func init() {
 
 func run() error {
 	fmt.Println("config", cfg)
-	//设置线程数，必须少于CPU核数
+	//设置线程数，建议少于CPU核数
 	if cfg.Process <= 0 && cfg.Process < runtime.NumCPU() {
 		runtime.GOMAXPROCS(cfg.Process)
 	}
