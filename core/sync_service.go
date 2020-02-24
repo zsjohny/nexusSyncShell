@@ -113,13 +113,14 @@ func (*NexusSyncService) StartDownload(config *Config) {
 	var wg sync.WaitGroup
 	wg.Add(len(assets))
 	for idx := range assets {
-		fmt.Println(assets[idx])
+		//fmt.Println("download asset info:", assets[idx])
 		go func(wg *sync.WaitGroup, asset *Asset) {
 			fileName := path.Base(asset.DownloadUrl)
 			fileName = localDir + string(os.PathSeparator) + fileName
 			fmt.Printf("ready to get fileName:%s\n", fileName)
 			if resp, err := http.Get(asset.DownloadUrl); err == nil {
-				buffer := bytes.NewBuffer(make([]byte, 4096))
+				var byteBuf []byte
+				buffer := bytes.NewBuffer(byteBuf)
 				_, err := io.Copy(buffer, resp.Body)
 				defer resp.Body.Close()
 				if err != nil {
