@@ -21,6 +21,7 @@ import (
 	"nexusSync/core"
 	"nexusSync/util"
 	"os"
+	"regexp"
 	"runtime"
 	"strings"
 )
@@ -86,18 +87,23 @@ func run() error {
 }
 
 func checkParam(config *core.Config) error {
-	if len(config.RemoteUrl) < 0 {
+	reg := `(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]`
+	if flag, _ := regexp.MatchString(reg, config.RemoteUrl); !flag {
 		return fmt.Errorf("param remoteUrl is not valid")
 	}
 	//设置线程数，建议少于CPU核数,如果超过核数将默认为核数大小
-	if cfg.Process > 0 && cfg.Process < runtime.NumCPU() {
+	if cfg.Process <= 0 || cfg.Process < runtime.NumCPU() {
 		runtime.GOMAXPROCS(cfg.Process)
+		fmt.Printf("process will use the default config, process = %d\n", runtime.NumCPU())
 	}
 	//验证user信息
+	if len(config.Auth) < 1 {
+		return fmt.Errorf("param Auth is not valid\n" +
+			"format:usr:pwd")
+	}
 	auth := strings.Split(config.Auth, ":")
-	if len(auth) < 1 {
+	if len(auth) < 2 {
 		return fmt.Errorf("auth info error, plearse split with `:`")
-
 	}
 	config.Usr = auth[0]
 	config.Pwd = auth[1]

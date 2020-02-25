@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"strings"
 )
 
 const (
@@ -18,7 +19,6 @@ const (
 	File_name        = "raw.assetN.filename"
 )
 
-//文件路径只兼容linux,不建议windows跑，有可能路径出错
 func NewMutipartPostRequest(postUrl, filePath string, tarPath string) (req *http.Request, err error) {
 	file, err := os.Open(filePath)
 	if err != nil {
@@ -26,6 +26,10 @@ func NewMutipartPostRequest(postUrl, filePath string, tarPath string) (req *http
 	}
 	defer file.Close()
 
+	//兼容win的情况，不需要可以去掉，因为path.Base的分隔符为/
+	if os.PathSeparator == '\\' {
+		filePath = strings.ReplaceAll(filePath, "\\", "/")
+	}
 	fileName := path.Base(filePath)
 
 	//创建一个模拟的form中的一个选项,这个form项现在是空的
