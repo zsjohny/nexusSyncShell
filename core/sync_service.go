@@ -8,8 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"nexusSync/util"
-	"os"
-	"path"
+	"path/filepath"
 	"strings"
 	"sync"
 )
@@ -18,21 +17,20 @@ const Nexus_operator = "/"
 
 type NexusSyncService struct {
 }
+type downloadModel struct {
+	tarPath     string
+	downloadUrl string
+}
 
 func (nexusSyncService *NexusSyncService) StartUpload(config *Config) {
 	fmt.Println("traverse the dir")
 	localPath := config.LocalDir
 
 	var postModels []util.PostModel
-	files, err := util.GetAllFiles(localPath, postModels, "/")
+	files, err := util.GetAllFiles(localPath, postModels, config.RemoteDir)
 	if err != nil {
 		fmt.Println(err)
 		return
-	}
-
-	remoteDir := Nexus_operator
-	if len(config.RemoteDir) > 0 {
-		remoteDir = config.RemoteDir
 	}
 
 	//使用等待group等待所有coroutine完成
@@ -41,7 +39,7 @@ func (nexusSyncService *NexusSyncService) StartUpload(config *Config) {
 
 	for _, file := range files {
 		go func(wg *sync.WaitGroup, file util.PostModel) {
-			err := util.NexusPost(config.RemoteUrl, config.Usr, config.Pwd, file.FilePath, remoteDir+file.LevelInfo)
+			err := util.NexusPost(config.RemoteUrl, config.Usr, config.Pwd, file.FilePath, file.LevelInfo)
 			if err != nil {
 				fmt.Println(err)
 			} else {
@@ -73,38 +71,53 @@ func (*NexusSyncService) StartDownload(config *Config) {
 		return
 	}
 	//查找匹配路径的文件
-	var assets []Asset
+	var downloadModels []downloadModel
+	remoteDir := config.RemoteDir
+	remotePath := remoteDir[1:]
 	for _, cpn := range *components {
-		if strings.HasPrefix(cpn.Group, config.RemoteDir) {
-			assets = append(assets, *cpn.Assets...)
+		for _, asset := range *cpn.Assets {
+			if strings.HasPrefix(asset.Path, remotePath) {
+				tarPath := strings.Replace(asset.Path, remotePath, "", 1)
+				// /4/智能小A.gif
+				tarPath = util.FormatOsPath(tarPath)
+				downloadModels = append(downloadModels, downloadModel{tarPath, asset.DownloadUrl})
+			}
+
 		}
 	}
 	//download list to target path
 	fmt.Println("ready to request remote to get files")
 	var wg sync.WaitGroup
-	wg.Add(len(assets))
-	for idx := range assets {
+	wg.Add(len(downloadModels))
+	for idx := range downloadModels {
 		//fmt.Println("download asset info:", assets[idx])
-		go func(wg *sync.WaitGroup, asset *Asset) {
-			fileName := path.Base(asset.DownloadUrl)
-			fileName = config.LocalDir + string(os.PathSeparator) + fileName
-			fmt.Printf("ready to get fileName:%s\n", fileName)
-			if resp, err := http.Get(asset.DownloadUrl); err == nil {
+		go func(wg *sync.WaitGroup, downloadModel *downloadModel) {
+			filePath := config.LocalDir + downloadModel.tarPath
+			fmt.Printf("ready to get fileName:%s\n", filePath)
+			if resp, err := http.Get(downloadModel.downloadUrl); err == nil {
 				var byteBuf []byte
 				buffer := bytes.NewBuffer(byteBuf)
 				_, err := io.Copy(buffer, resp.Body)
 				defer resp.Body.Close()
 				if err != nil {
-					fmt.Printf("io copy fail when get file %s, err:%s\n", fileName, err)
+					fmt.Printf("io copy fail when get file %s, err:%s\n", filePath, err)
 					return
 				}
-				ioutil.WriteFile(fileName, buffer.Bytes(), 0777)
-				fmt.Printf("receive file %s success \n", fileName)
+				err = util.CreateDirs(filepath.Dir(filePath))
+				if err != nil {
+					fmt.Printf("make dir error %s\n", filePath)
+				}
+
+				err = ioutil.WriteFile(filePath, buffer.Bytes(), 0777)
+				if err != nil {
+					fmt.Printf("write the file %s fail\n", filePath)
+				}
+				fmt.Printf("receive file %s success \n", filePath)
 			} else {
-				fmt.Printf("file %s download fail\n", fileName)
+				fmt.Printf("file %s download fail\n", filePath)
 			}
 			wg.Done()
-		}(&wg, &assets[idx])
+		}(&wg, &downloadModels[idx])
 	}
 
 	wg.Wait()

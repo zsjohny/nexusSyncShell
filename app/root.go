@@ -55,7 +55,7 @@ func initFlags() {
 		"upload:POST, download:GET")
 	flagSet.StringVarP(&cfg.Auth, "auth", "u", "", "basic auth user info,format: usr:pwd")
 	flagSet.IntVarP(&cfg.Process, "proc", "p", 0, "the proc num, but no bigger than the proc of executing machine")
-	flagSet.StringVarP(&cfg.RemoteDir, "remoteDir", "d", "/", "the dir that you want to download/upload of nexus")
+	flagSet.StringVarP(&cfg.RemoteDir, "remoteDir", "d", "", "the dir that you want to download/upload of nexus")
 	flagSet.StringVarP(&cfg.LocalDir, "localDir", "l", "", "the dir that you want to download/upload of local machine")
 
 }
@@ -102,11 +102,18 @@ func checkParam(config *core.Config) error {
 	config.Usr = auth[0]
 	config.Pwd = auth[1]
 
-	//验证localDir
+	//验证localDir和规范格式
+	config.LocalDir = util.FormatLocalPath(config.LocalDir)
 	localDir := config.LocalDir
 	if err := util.PathExists(localDir); err != nil {
-		fmt.Println(err)
 		return fmt.Errorf("param localDir is not valid")
 	}
+
+	//规范格式
+	if len(config.RemoteDir) <= 0 {
+		return fmt.Errorf("param RemoteDir is not valid,standard format is /a/b")
+	}
+	config.RemoteDir = util.FormatNexusPathSeparator(config.RemoteDir)
+
 	return nil
 }
