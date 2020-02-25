@@ -89,7 +89,7 @@ func run() error {
 func checkParam(config *core.Config) error {
 	reg := `(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]`
 	if flag, _ := regexp.MatchString(reg, config.RemoteUrl); !flag {
-		return fmt.Errorf("param remoteUrl is not valid")
+		return fmt.Errorf("param remoteUrl(-r) is not valid")
 	}
 	//设置线程数，建议少于CPU核数,如果超过核数将默认为核数大小
 	if cfg.Process <= 0 || cfg.Process < runtime.NumCPU() {
@@ -98,7 +98,7 @@ func checkParam(config *core.Config) error {
 	}
 	//验证user信息
 	if len(config.Auth) < 1 {
-		return fmt.Errorf("param Auth is not valid\n" +
+		return fmt.Errorf("param Auth(-u) is not valid\n" +
 			"format:usr:pwd")
 	}
 	auth := strings.Split(config.Auth, ":")
@@ -112,12 +112,12 @@ func checkParam(config *core.Config) error {
 	config.LocalDir = util.FormatLocalPath(config.LocalDir)
 	localDir := config.LocalDir
 	if err := util.PathExists(localDir); err != nil {
-		return fmt.Errorf("param localDir is not valid")
+		return fmt.Errorf("param localDir(-l) is not valid")
 	}
 
 	//规范格式
 	if len(config.RemoteDir) <= 0 {
-		return fmt.Errorf("param RemoteDir is not valid,standard format is /a/b")
+		return fmt.Errorf("param RemoteDir(-d) is not valid,standard format is /a/b")
 	}
 	config.RemoteDir = util.FormatNexusPathSeparator(config.RemoteDir)
 

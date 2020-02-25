@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="10fc44dd-7edd-43c3-8605-502b791d0c45" name="Default Changelist" comment="">
+    <list default="true" id="10fc44dd-7edd-43c3-8605-502b791d0c45" name="Default Changelist" comment="格式统一处理，层级遍历">
+      <change afterPath="$PROJECT_DIR$/nexusSync_linux" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nexusSync_mac" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/root.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/root.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/test/test.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/test/test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/http_util.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/http_util.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/sync_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/sync_service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -33,8 +36,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/util/file_util.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="301">
-              <caret line="52" column="73" selection-start-line="52" selection-start-column="73" selection-end-line="52" selection-end-column="73" />
+            <state relative-caret-position="-16">
+              <caret line="42" column="5" selection-start-line="42" selection-start-column="5" selection-end-line="42" selection-end-column="5" />
               <folding>
                 <element signature="e#14#56#0" expanded="true" />
               </folding>
@@ -45,36 +48,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/sync_service.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="203">
-              <caret line="57" column="49" selection-start-line="57" selection-start-column="49" selection-end-line="57" selection-end-column="49" />
+            <state relative-caret-position="178">
+              <caret line="44" column="9" lean-forward="true" selection-start-line="44" selection-start-column="9" selection-end-line="44" selection-end-column="9" />
               <folding>
                 <element signature="e#14#128#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/root.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="175">
-              <caret line="19" column="12" selection-start-line="19" selection-start-column="12" selection-end-line="19" selection-end-column="12" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/go.sum">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2901" />
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/go.mod">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="125">
-              <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
             </state>
           </provider>
         </entry>
@@ -106,11 +84,23 @@
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/root.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="290">
+              <caret line="115" column="5" lean-forward="true" selection-start-line="115" selection-start-column="5" selection-end-line="115" selection-end-column="5" />
+              <folding>
+                <element signature="e#587#704#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/test/test.go">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="625">
-              <caret line="25" column="38" selection-start-line="16" selection-start-column="4" selection-end-line="25" selection-end-column="38" />
+              <caret line="25" column="34" selection-start-line="16" selection-start-column="4" selection-end-line="25" selection-end-column="34" />
             </state>
           </provider>
         </entry>
@@ -139,11 +129,11 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/core/model.go" />
         <option value="$PROJECT_DIR$/util/file_util.go" />
-        <option value="$PROJECT_DIR$/core/sync_service.go" />
         <option value="$PROJECT_DIR$/util/http_util.go" />
-        <option value="$PROJECT_DIR$/app/root.go" />
         <option value="$PROJECT_DIR$/core/test/test.go" />
         <option value="$PROJECT_DIR$/go.mod" />
+        <option value="$PROJECT_DIR$/core/sync_service.go" />
+        <option value="$PROJECT_DIR$/app/root.go" />
       </list>
     </option>
   </component>
@@ -156,9 +146,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="482" />
-    <option name="width" value="783" />
-    <option name="height" value="813" />
+    <option name="x" value="481" />
+    <option name="width" value="784" />
+    <option name="height" value="814" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -205,7 +195,7 @@
     <property name="GO_FMT" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1582612284859" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1582626480067" />
     <property name="go.gopath.indexing.explicitly.defined" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../syncDictService" />
@@ -252,7 +242,7 @@
       <option name="presentableId" value="Default" />
       <updated>1582448740697</updated>
       <workItem from="1582448742484" duration="14182000" />
-      <workItem from="1582466648967" duration="30146000" />
+      <workItem from="1582466648967" duration="32637000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1582527793043</created>
@@ -296,11 +286,18 @@
       <option name="project" value="LOCAL" />
       <updated>1582600082878</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="加入module概念">
+      <created>1582612346880</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1582612346880</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="44328000" />
+    <option name="totallyTimeSpent" value="46819000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -313,16 +310,17 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Designer" order="0" />
       <window_info id="UI Designer" order="1" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Favorites" order="3" sideWeight="0.50252527" side_tool="true" weight="0.2533512" />
       <window_info id="Image Layers" order="4" />
-      <window_info content_ui="combo" id="Project" order="5" sideWeight="0.49747476" visible="true" weight="0.2533512" />
+      <window_info active="true" content_ui="combo" id="Project" order="5" sideWeight="0.49747476" visible="true" weight="0.2533512" />
       <window_info id="Structure" order="6" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Version Control" order="0" weight="0.32991204" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="1" visible="true" weight="0.42375368" />
+      <window_info anchor="bottom" id="Terminal" order="1" weight="0.37683284" />
       <window_info anchor="bottom" id="Database Changes" order="2" />
       <window_info anchor="bottom" id="Event Log" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Docker" order="4" show_stripe_button="false" />
@@ -383,7 +381,9 @@
     <MESSAGE value="fix bug" />
     <MESSAGE value="上传遍历层级功能" />
     <MESSAGE value="格式统一处理，层级遍历" />
-    <option name="LAST_COMMIT_MESSAGE" value="格式统一处理，层级遍历" />
+    <MESSAGE value="加入module概念" />
+    <MESSAGE value="规范格式，对mac做兼容" />
+    <option name="LAST_COMMIT_MESSAGE" value="规范格式，对mac做兼容" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
@@ -553,30 +553,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/sync_service.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="57" column="49" selection-start-line="57" selection-start-column="49" selection-end-line="57" selection-end-column="49" />
-          <folding>
-            <element signature="e#14#128#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/util/file_util.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="301">
-          <caret line="52" column="73" selection-start-line="52" selection-start-column="73" selection-end-line="52" selection-end-column="73" />
-          <folding>
-            <element signature="e#14#56#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://D:/Program Files/Go/src/regexp/regexp.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="529" column="5" selection-start-line="529" selection-start-column="5" selection-end-line="529" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/go.mod">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="4" column="9" lean-forward="true" selection-start-line="4" selection-start-column="9" selection-end-line="4" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/go.sum">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="8" column="4" selection-start-line="8" selection-start-column="4" selection-end-line="8" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/test/test.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="625">
+          <caret line="25" column="34" selection-start-line="16" selection-start-column="4" selection-end-line="25" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/sync_service.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="178">
+          <caret line="44" column="9" lean-forward="true" selection-start-line="44" selection-start-column="9" selection-end-line="44" selection-end-column="9" />
+          <folding>
+            <element signature="e#14#128#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -590,29 +601,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/test/test.go">
+    <entry file="file://$PROJECT_DIR$/util/file_util.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="625">
-          <caret line="25" column="38" selection-start-line="16" selection-start-column="4" selection-end-line="25" selection-end-column="38" />
+        <state relative-caret-position="-16">
+          <caret line="42" column="5" selection-start-line="42" selection-start-column="5" selection-end-line="42" selection-end-column="5" />
+          <folding>
+            <element signature="e#14#56#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/root.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="19" column="12" selection-start-line="19" selection-start-column="12" selection-end-line="19" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/go.sum">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2901" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/go.mod">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="125">
-          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+        <state relative-caret-position="290">
+          <caret line="115" column="5" lean-forward="true" selection-start-line="115" selection-start-column="5" selection-end-line="115" selection-end-column="5" />
+          <folding>
+            <element signature="e#587#704#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

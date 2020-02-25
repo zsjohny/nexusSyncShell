@@ -13,7 +13,8 @@ import (
 	"sync"
 )
 
-const Nexus_operator = "/"
+const nexusOperator = "/"
+const macIgnore = ".DS_Store"
 
 type NexusSyncService struct {
 }
@@ -38,6 +39,10 @@ func (nexusSyncService *NexusSyncService) StartUpload(config *Config) {
 	wg.Add(len(files))
 
 	for _, file := range files {
+		if strings.Index(file.FilePath, macIgnore) != -1 {
+			wg.Done()
+			continue
+		}
 		go func(wg *sync.WaitGroup, file util.PostModel) {
 			err := util.NexusPost(config.RemoteUrl, config.Usr, config.Pwd, file.FilePath, file.LevelInfo)
 			if err != nil {
