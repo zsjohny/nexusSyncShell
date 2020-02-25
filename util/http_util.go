@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"os"
 	"path"
-	"strings"
 )
 
 const (
@@ -27,8 +26,6 @@ func NewMutipartPostRequest(postUrl, filePath string, tarPath string) (req *http
 	}
 	defer file.Close()
 
-	// TODO 正式环境去除,兼容win
-	filePath = strings.ReplaceAll(filePath, "\\", "/")
 	fileName := path.Base(filePath)
 
 	//创建一个模拟的form中的一个选项,这个form项现在是空的
