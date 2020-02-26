@@ -51,13 +51,14 @@ func Execute() {
 func initFlags() {
 	flagSet := rootCmd.Flags()
 	// url & output
-	flagSet.StringVarP(&cfg.RemoteUrl, "remoteUrl", "r", "", "")
+	flagSet.StringVarP(&cfg.RemoteUrl, "remoteUrl", "u", "", "format: https://nexus.huya.com")
 	flagSet.StringVarP(&cfg.Option, "option", "X", "", "format:POST/GET\n"+
 		"upload:POST, download:GET")
-	flagSet.StringVarP(&cfg.Auth, "auth", "u", "", "basic auth user info,format: usr:pwd")
+	flagSet.StringVarP(&cfg.Auth, "auth", "a", "", "basic auth user info,format: usr:pwd")
 	flagSet.IntVarP(&cfg.Process, "proc", "p", 0, "the proc num, but no bigger than the proc of executing machine")
 	flagSet.StringVarP(&cfg.RemoteDir, "remoteDir", "d", "", "the dir that you want to download/upload of nexus")
 	flagSet.StringVarP(&cfg.LocalDir, "localDir", "l", "", "the dir that you want to download/upload of local machine")
+	flagSet.StringVarP(&cfg.Repository, "repo", "r", "", "the repository of nexus")
 
 }
 func init() {
@@ -87,9 +88,15 @@ func run() error {
 }
 
 func checkParam(config *core.Config) error {
-	reg := `(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]`
+	reg := `^(?=^.{3,255}$)(http(s)?:\/\/)?(www\.)?[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+\.\w+)*$`
 	if flag, _ := regexp.MatchString(reg, config.RemoteUrl); !flag {
-		return fmt.Errorf("param remoteUrl(-r) is not valid")
+		return fmt.Errorf("param remoteUrl(-u) is not valid\n" +
+			"format: https://nexus.huya.com")
+	}
+
+	//仓库不能为空
+	if len(cfg.Repository) <= 0 {
+		return fmt.Errorf("param [repo(-r)] is not valid")
 	}
 	//设置线程数，建议少于CPU核数,如果超过核数将默认为核数大小
 	if cfg.Process <= 0 || cfg.Process < runtime.NumCPU() {
@@ -98,7 +105,7 @@ func checkParam(config *core.Config) error {
 	}
 	//验证user信息
 	if len(config.Auth) < 1 {
-		return fmt.Errorf("param Auth(-u) is not valid\n" +
+		return fmt.Errorf("param [auth(-u)] is not valid\n" +
 			"format:usr:pwd")
 	}
 	auth := strings.Split(config.Auth, ":")
@@ -112,12 +119,12 @@ func checkParam(config *core.Config) error {
 	config.LocalDir = util.FormatLocalPath(config.LocalDir)
 	localDir := config.LocalDir
 	if err := util.PathExists(localDir); err != nil {
-		return fmt.Errorf("param localDir(-l) is not valid")
+		return fmt.Errorf("param [localDir(-l)] is not valid")
 	}
 
 	//规范格式
 	if len(config.RemoteDir) <= 0 {
-		return fmt.Errorf("param RemoteDir(-d) is not valid,standard format is /a/b")
+		return fmt.Errorf("param [remoteDir(-r)] is not valid,standard format is /a/b")
 	}
 	config.RemoteDir = util.FormatNexusPathSeparator(config.RemoteDir)
 

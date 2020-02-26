@@ -5,24 +5,23 @@ import "nexusSync/core"
 func main() {
 
 	//fmt.Println(strings.HasPrefix("11123a", "1113"))
-	/*config := core.Config{"POST",
+	config := core.Config{"POST",
 		"xiao:xiao",
-		"https://nexus.huya.com/service/rest/v1/components?repository=xiao",
+		"https://nexus.huya.com",
 		2,
-		"/lsj_test",
-		"c:\\test", "xiao", "xiao"}
+		"/lsj_test11",
+		"c:\\testdown", "xiao", "xiao", "xiao"}
 
 	servcie := new(core.NexusSyncService)
-	servcie.StartUpload(&config)*/
-	config := core.Config{"GET",
+	servcie.StartUpload(&config)
+	config = core.Config{"GET",
 		"xiao:xiao",
-		"https://nexus.huya.com/service/rest/v1/components?repository=xiao",
+		"https://nexus.huya.com",
 		2,
-		"/lsj_test",
-		"c:\\testdown",
-		"xiao", "xiao"}
+		"/lsj_test11",
+		"c:\\test",
+		"xiao", "xiao", "xiao"}
 
-	servcie := new(core.NexusSyncService)
 	servcie.StartDownload(&config)
 	//url := "https://nexus.huya.com/repository/xiao/lichuanxiao/defaults.js"
 	//fmt.Println(path.Base(url))
