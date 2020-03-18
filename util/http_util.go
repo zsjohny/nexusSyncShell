@@ -69,7 +69,7 @@ func NexusPost(postUrl, username, password, filePath, tarPath string) error {
 	req.SetBasicAuth(username, password)
 	response, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return fmt.Errorf("file %s request fail\n", filePath)
+		return fmt.Errorf("file %s request fail, please check your network or url\n", filePath)
 	}
 	if response.StatusCode != http.StatusNoContent {
 		return fmt.Errorf("response status code error,code = %d, file : %s\n", response.StatusCode, filePath)

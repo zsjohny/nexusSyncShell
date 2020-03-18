@@ -7,22 +7,22 @@ func main() {
 	//fmt.Println(strings.HasPrefix("11123a", "1113"))
 	config := core.Config{"POST",
 		"xiao:xiao",
-		"https://nexus.huya.com",
+		"https://dt-file.huya.info",
 		2,
 		"/lsj_test11",
-		"c:\\testdown", "xiao", "xiao", "xiao"}
+		"E:\\learn\\15.左耳听风-陈皓", "WEB", "WEB", "job7Yvet2wB6HkaG"}
 
 	servcie := new(core.NexusSyncService)
 	servcie.StartUpload(&config)
-	config = core.Config{"GET",
+	/*config = core.Config{"GET",
 		"xiao:xiao",
 		"https://nexus.huya.com",
 		2,
 		"/lsj_test11",
 		"c:\\test",
-		"xiao", "xiao", "xiao"}
+		"xiao", "xiao", "xiao"}*/
 
-	servcie.StartDownload(&config)
+	//servcie.StartDownload(&config)
 	//url := "https://nexus.huya.com/repository/xiao/lichuanxiao/defaults.js"
 	//fmt.Println(path.Base(url))
 	/*jsonStr:=`{

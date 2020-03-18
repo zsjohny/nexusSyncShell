@@ -41,6 +41,11 @@ func IsFile(path string) bool {
 
 //c:\test /data/a basePath - > /
 func GetAllFiles(pathname string, postModels []PostModel, basePath string) ([]PostModel, error) {
+	//判断所给路径是否为文件
+	if IsFile(pathname){
+		postModels = append(postModels, PostModel{pathname, basePath})
+		return postModels, nil
+	}
 	sep := string(os.PathSeparator)
 	rd, err := ioutil.ReadDir(pathname)
 	if err != nil {

@@ -24,9 +24,11 @@ import (
 	"regexp"
 	"runtime"
 	"strings"
+	"time"
 )
 
 var cfg = new(core.Config)
+var versionFlag bool
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -51,14 +53,15 @@ func Execute() {
 func initFlags() {
 	flagSet := rootCmd.Flags()
 	// url & output
-	flagSet.StringVarP(&cfg.RemoteUrl, "remoteUrl", "u", "", "format: https://nexus.huya.com")
-	flagSet.StringVarP(&cfg.Option, "option", "X", "", "format:POST/GET\n"+
+	flagSet.StringVarP(&cfg.RemoteUrl, "remoteUrl", "u", "", "[Required]format: https://nexus.huya.com")
+	flagSet.StringVarP(&cfg.Option, "option", "X", "", "[Required]format:POST/GET\n"+
 		"upload:POST, download:GET")
-	flagSet.StringVarP(&cfg.Auth, "auth", "a", "", "basic auth user info,format: usr:pwd")
-	flagSet.IntVarP(&cfg.Process, "proc", "p", 0, "the proc num, but no bigger than the proc of executing machine")
-	flagSet.StringVarP(&cfg.RemoteDir, "remoteDir", "d", "", "the dir that you want to download/upload of nexus")
-	flagSet.StringVarP(&cfg.LocalDir, "localDir", "l", "", "the dir that you want to download/upload of local machine")
-	flagSet.StringVarP(&cfg.Repository, "repo", "r", "", "the repository of nexus")
+	flagSet.StringVarP(&cfg.Auth, "auth", "a", "", "[Required]basic auth user info,format: usr:pwd")
+	flagSet.IntVarP(&cfg.Process, "proc", "p", 0, "[Not Required][default:1]the proc num, but no bigger than the proc of executing machine")
+	flagSet.StringVarP(&cfg.RemoteDir, "remoteDir", "d", "", "[Required]the dir that you want to download/upload of nexus")
+	flagSet.StringVarP(&cfg.LocalDir, "localDir", "l", "", "[Required]the dir that you want to download/upload of local machine")
+	flagSet.StringVarP(&cfg.Repository, "repo", "r", "", "[Required]the repository of nexus")
+	flagSet.BoolVarP(&versionFlag, "version", "v", false, "version" )
 
 }
 func init() {
@@ -66,6 +69,11 @@ func init() {
 }
 
 func run() error {
+	t1 := time.Now()
+	if versionFlag == true{
+		fmt.Printf("nexusSync version is v%s\n", Version)
+		return nil
+	}
 	err := checkParam(cfg)
 	if err != nil {
 		fmt.Println(err)
@@ -84,11 +92,13 @@ func run() error {
 	default:
 		fmt.Println("option error, format:GET / POST")
 	}
+	t2 := time.Now()
+	fmt.Println(t2.Sub(t1))
 	return nil
 }
 
 func checkParam(config *core.Config) error {
-	reg := `^(?=^.{3,255}$)(http(s)?:\/\/)?(www\.)?[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+\.\w+)*$`
+	reg := `(http(s)?:\/\/)?(www\.)?[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+\.\w+)*$`
 	if flag, _ := regexp.MatchString(reg, config.RemoteUrl); !flag {
 		return fmt.Errorf("param remoteUrl(-u) is not valid\n" +
 			"format: https://nexus.huya.com")
@@ -99,8 +109,11 @@ func checkParam(config *core.Config) error {
 		return fmt.Errorf("param [repo(-r)] is not valid")
 	}
 	//设置线程数，建议少于CPU核数,如果超过核数将默认为核数大小
-	if cfg.Process <= 0 || cfg.Process < runtime.NumCPU() {
-		runtime.GOMAXPROCS(cfg.Process)
+	if cfg.Process == 0 {
+		runtime.GOMAXPROCS(1)
+		fmt.Printf("process will use the default config, process = %d\n", 1)
+	}
+	if cfg.Process > runtime.NumCPU(){
 		fmt.Printf("process will use the default config, process = %d\n", runtime.NumCPU())
 	}
 	//验证user信息
