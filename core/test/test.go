@@ -7,7 +7,7 @@ func main() {
 	//fmt.Println(strings.HasPrefix("11123a", "1113"))
 	config := core.Config{"POST",
 		"xiao:xiao",
-		"https://dt-file.huya.info",
+		"https://",
 		2,
 		"/lsj_test11",
 		"E:\\learn\\15.左耳听风-陈皓", "WEB", "WEB", "job7Yvet2wB6HkaG"}
@@ -15,15 +15,15 @@ func main() {
 	servcie := new(core.NexusSyncService)
 	servcie.StartUpload(&config)
 	/*config = core.Config{"GET",
-		"xiao:xiao",
-		"https://nexus.huya.com",
-		2,
-		"/lsj_test11",
-		"c:\\test",
-		"xiao", "xiao", "xiao"}*/
+	"xiao:xiao",
+	"https://",
+	2,
+	"/lsj_test11",
+	"c:\\test",
+	"xiao", "xiao", "xiao"}*/
 
 	//servcie.StartDownload(&config)
-	//url := "https://nexus.huya.com/repository/xiao/lichuanxiao/defaults.js"
+	//url := "https://"
 	//fmt.Println(path.Base(url))
 	/*jsonStr:=`{
 	  "items": [
@@ -36,7 +36,7 @@ func main() {
 	      "version": null,
 	      "assets": [
 	        {
-	          "downloadUrl": "https://nexus.huya.com/repository/xiao/lichuanxiao/defaults.js",
+	          "downloadUrl": "https://nexus..com/repository/xiao/lichuanxiao/defaults.js",
 	          "path": "lichuanxiao/defaults.js",
 	          "id": "eGlhbzo5NjE4ODg5ZjVmODA2Mjg1YWJiNjY5NDAzNGU4YTExNQ",
 	          "repository": "xiao",
@@ -55,12 +55,12 @@ func main() {
 	      "repository": "xiao",
 	      "format": "raw",
 	      "group": "/chenjingxiong",
-	      "name": "chenjingxiong/智能小A.jpg",
+	      "name": "chenjingxiong/.jpg",
 	      "version": null,
 	      "assets": [
 	        {
-	          "downloadUrl": "https://nexus.huya.com/repository/xiao/chenjingxiong/智能小A.jpg",
-	          "path": "chenjingxiong/智能小A.jpg",
+	          "downloadUrl": "https://nexus..com/repository/xiao/chenjingxiong/.jpg",
+	          "path": "chenjingxiong/.jpg",
 	          "id": "eGlhbzo0ZDU3ZjcxYzFkNzk4ZDJkMTM0MDVkNjQ2MTE4ZWE0NQ",
 	          "repository": "xiao",
 	          "format": "raw",
@@ -82,7 +82,7 @@ func main() {
 	      "version": null,
 	      "assets": [
 	        {
-	          "downloadUrl": "https://nexus.huya.com/repository/xiao/a_test/mls_lca.log",
+	          "downloadUrl": "https://nexus..com/repository/xiao/a_test/mls_lca.log",
 	          "path": "a_test/mls_lca.log",
 	          "id": "eGlhbzoyMjVhZjY3YTc5NjJmNjU3ZDg4YzI5NzlkMTk4NWNlMw",
 	          "repository": "xiao",
@@ -105,7 +105,7 @@ func main() {
 	      "version": null,
 	      "assets": [
 	        {
-	          "downloadUrl": "https://nexus.huya.com/repository/xiao/a_test/a.jpg",
+	          "downloadUrl": "https://nexus..com/repository/xiao/a_test/a.jpg",
 	          "path": "a_test/a.jpg",
 	          "id": "eGlhbzo0Y2ZmNGZkMTQ0YWMzMWY2Mzg2OGY1ZDliZWY2MGViOQ",
 	          "repository": "xiao",
@@ -124,12 +124,12 @@ func main() {
 	      "repository": "xiao",
 	      "format": "raw",
 	      "group": "/a_test",
-	      "name": "a_test/智能小A.jpg",
+	      "name": "a_test/.jpg",
 	      "version": null,
 	      "assets": [
 	        {
-	          "downloadUrl": "https://nexus.huya.com/repository/xiao/a_test/智能小A.jpg",
-	          "path": "a_test/智能小A.jpg",
+	          "downloadUrl": "https://nexus..com/repository/xiao/a_test/.jpg",
+	          "path": "a_test/.jpg",
 	          "id": "eGlhbzoyMmEyMDRlZTJhYjJiNmI4MzRjYzRjZWVkNTY3M2YxMg",
 	          "repository": "xiao",
 	          "format": "raw",
@@ -151,7 +151,7 @@ func main() {
 	      "version": null,
 	      "assets": [
 	        {
-	          "downloadUrl": "https://nexus.huya.com/repository/xiao/a_test/tony_test_scp.jpg",
+	          "downloadUrl": "https://nexus..com/repository/xiao/a_test/tony_test_scp.jpg",
 	          "path": "a_test/tony_test_scp.jpg",
 	          "id": "eGlhbzo0ZDU3ZjcxYzFkNzk4ZDJkMGJkZGIxMTZkZDBkZDk3MA",
 	          "repository": "xiao",
@@ -174,7 +174,7 @@ func main() {
 	      "version": null,
 	      "assets": [
 	        {
-	          "downloadUrl": "https://nexus.huya.com/repository/xiao/a_test/record.txt",
+	          "downloadUrl": "https://nexus..com/repository/xiao/a_test/record.txt",
 	          "path": "a_test/record.txt",
 	          "id": "eGlhbzpmYjBhM2JiMmI0NGFhMzUwN2JhY2Q0YjY0MGQ1Mjc2Mg",
 	          "repository": "xiao",
@@ -197,7 +197,7 @@ func main() {
 	      "version": null,
 	      "assets": [
 	        {
-	          "downloadUrl": "https://nexus.huya.com/repository/xiao/lsj_test/mls_lca.log",
+	          "downloadUrl": "https://nexus..com/repository/xiao/lsj_test/mls_lca.log",
 	          "path": "lsj_test/mls_lca.log",
 	          "id": "eGlhbzo5NjE4ODg5ZjVmODA2Mjg1YjVkNDNlM2IzYjdhYzgzOQ",
 	          "repository": "xiao",
@@ -220,7 +220,7 @@ func main() {
 	      "version": null,
 	      "assets": [
 	        {
-	          "downloadUrl": "https://nexus.huya.com/repository/xiao/lsj_test/1.log",
+	          "downloadUrl": "https://nexus..com/repository/xiao/lsj_test/1.log",
 	          "path": "lsj_test/1.log",
 	          "id": "eGlhbzozN2JhZGU2NDE1YjQzZDFiMmE5NWE5NGMzY2VkZmVlOQ",
 	          "repository": "xiao",
@@ -239,12 +239,12 @@ func main() {
 	      "repository": "xiao",
 	      "format": "raw",
 	      "group": "/",
-	      "name": "huya.pdf",
+	      "name": ".pdf",
 	      "version": null,
 	      "assets": [
 	        {
-	          "downloadUrl": "https://nexus.huya.com/repository/xiao/huya.pdf",
-	          "path": "huya.pdf",
+	          "downloadUrl": "https://nexus..com/repository/xiao/.pdf",
+	          "path": ".pdf",
 	          "id": "eGlhbzpmYjM1MTEwMDg4ZDc4ZGQwYzY5YWM5ODU2NWJjYjhmZA",
 	          "repository": "xiao",
 	          "format": "raw",
@@ -274,7 +274,7 @@ func main() {
 	//
 	/*config := core.Config{"POST",
 	"xiao:xiao",
-	"https://nexus.huya.com/service/rest/v1/components?repository=xiao",
+	"https://nexus..com/service/rest/v1/components?repository=xiao",
 	2,
 	"/lsj_test",
 	path}

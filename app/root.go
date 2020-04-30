@@ -53,7 +53,7 @@ func Execute() {
 func initFlags() {
 	flagSet := rootCmd.Flags()
 	// url & output
-	flagSet.StringVarP(&cfg.RemoteUrl, "remoteUrl", "u", "", "[Required]format: https://nexus.huya.com")
+	flagSet.StringVarP(&cfg.RemoteUrl, "remoteUrl", "u", "", "[Required]format: https://nexus.Rxxx.com")
 	flagSet.StringVarP(&cfg.Option, "option", "X", "", "[Required]format:POST/GET\n"+
 		"upload:POST, download:GET")
 	flagSet.StringVarP(&cfg.Auth, "auth", "a", "", "[Required]basic auth user info,format: usr:pwd")
@@ -61,7 +61,7 @@ func initFlags() {
 	flagSet.StringVarP(&cfg.RemoteDir, "remoteDir", "d", "", "[Required]the dir that you want to download/upload of nexus")
 	flagSet.StringVarP(&cfg.LocalDir, "localDir", "l", "", "[Required]the dir that you want to download/upload of local machine")
 	flagSet.StringVarP(&cfg.Repository, "repo", "r", "", "[Required]the repository of nexus")
-	flagSet.BoolVarP(&versionFlag, "version", "v", false, "version" )
+	flagSet.BoolVarP(&versionFlag, "version", "v", false, "version")
 
 }
 func init() {
@@ -70,7 +70,7 @@ func init() {
 
 func run() error {
 	t1 := time.Now()
-	if versionFlag == true{
+	if versionFlag == true {
 		fmt.Printf("nexusSync version is v%s\n", Version)
 		return nil
 	}
@@ -101,7 +101,7 @@ func checkParam(config *core.Config) error {
 	reg := `(http(s)?:\/\/)?(www\.)?[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+\.\w+)*$`
 	if flag, _ := regexp.MatchString(reg, config.RemoteUrl); !flag {
 		return fmt.Errorf("param remoteUrl(-u) is not valid\n" +
-			"format: https://nexus.huya.com")
+			"format: https://nexus.xxx.com")
 	}
 
 	//仓库不能为空
@@ -113,7 +113,7 @@ func checkParam(config *core.Config) error {
 		runtime.GOMAXPROCS(1)
 		fmt.Printf("process will use the default config, process = %d\n", 1)
 	}
-	if cfg.Process > runtime.NumCPU(){
+	if cfg.Process > runtime.NumCPU() {
 		fmt.Printf("process will use the default config, process = %d\n", runtime.NumCPU())
 	}
 	//验证user信息
